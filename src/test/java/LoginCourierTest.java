@@ -1,3 +1,4 @@
+import com.google.gson.Gson;
 import io.restassured.RestAssured;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,6 +40,16 @@ public class LoginCourierTest {
         response.then().assertThat().body("id", notNullValue())
                 .and()
                 .statusCode(200);
+        String id = response.getBody().asString();
+        Gson gson = new Gson();
+        CourierID courierID = gson.fromJson(id, CourierID.class);
+        // Удаляем курьера
+        Response response1 = given()
+                        .header("Content-type", "application/json")
+                        .and()
+                        .body(courierID)
+                        .when()
+                        .delete("/api/v1/courier");
     }
 
     @Test

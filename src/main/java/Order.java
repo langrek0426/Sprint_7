@@ -1,24 +1,15 @@
 public class Order {
-    public String firstName;
-    public String lastName;
-    public String address;
-    public String metroStation;
-    public String phone;
-    public int rentTime;
-    public String deliveryDate;
-    public String comment;
+    public String firstName = "Tyrion";
+    public String lastName = "Lannister";
+    public String address = "Kings landing";
+    public String metroStation = "Casterly rock station";
+    public String phone =  "+79601242299";
+    public int rentTime = 6;
+    public String deliveryDate = "2022-12-14";
+    public String comment = "A Lannister always pays his debts";
     public String[] color;
 
-    public Order (String firstName, String lastName, String address, String metroStation, String phone, int rentTime,
-                  String deliveryDate, String comment, String[] color) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.metroStation = metroStation;
-        this.phone = phone;
-        this.rentTime = rentTime;
-        this.deliveryDate = deliveryDate;
-        this.comment = comment;
+    public Order (String[] color) {
         this.color = color;
     }
 

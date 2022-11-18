@@ -1,5 +1,7 @@
+import com.google.gson.Gson;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,11 +18,10 @@ public class CreateCourierTest {
     public void setUp() {
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru";
     }
-
+    String postfix = Integer.toString(new Random().nextInt(10000));
+    String randomPassword = Integer.toString(new Random().nextInt(10000));
     @Test
     public void checkCreateCourierTest () {
-        String postfix = Integer.toString(new Random().nextInt(10000));
-        String randomPassword = Integer.toString(new Random().nextInt(10000));
         Courier courier = new Courier("login" + postfix, randomPassword, "name" + postfix);
         Response response =
                 given()
@@ -36,8 +37,6 @@ public class CreateCourierTest {
 
     @Test
     public void checkSameLoginTest () {
-        String postfix = Integer.toString(new Random().nextInt(10000));
-        String randomPassword = Integer.toString(new Random().nextInt(10000));
         Courier courier = new Courier("login" + postfix, randomPassword, "name" + postfix);
         // Создание курьера
         given()
@@ -61,7 +60,6 @@ public class CreateCourierTest {
 
     @Test
     public void checkEmptyPasswordTest() {
-        String postfix = Integer.toString(new Random().nextInt(10000));
         Courier courier = new Courier("login" + postfix, null, "name" + postfix);
         Response response =
                 given()
@@ -77,8 +75,6 @@ public class CreateCourierTest {
 
     @Test
     public void checkEmptyLoginTest() {
-        String postfix = Integer.toString(new Random().nextInt(10000));
-        String randomPassword = Integer.toString(new Random().nextInt(10000));
         Courier courier = new Courier(null, randomPassword, "name" + postfix);
         Response response =
                 given()
@@ -92,4 +88,32 @@ public class CreateCourierTest {
                 .statusCode(400);
     }
 
+    @After
+    public void deleteCourier() {
+        Courier courier = new Courier("login" + postfix, randomPassword, null);
+        Response response =
+                given()
+                        .header("Content-type", "application/json")
+                        .and()
+                        .body(courier)
+                        .when()
+                        .post("/api/v1/courier/login");
+        if (response.statusCode() == 200) {
+            Response responseLogin = given()
+                    .header("Content-type", "application/json")
+                    .and()
+                    .body(courier)
+                    .when()
+                    .post("/api/v1/courier/login");
+            String id = responseLogin.getBody().asString();
+            Gson gson = new Gson();
+            CourierID courierID = gson.fromJson(id, CourierID.class);
+            given()
+                    .header("Content-type", "application/json")
+                    .and()
+                    .body(courierID)
+                    .when()
+                    .delete("/api/v1/courier");
+        }
+    }
 }
