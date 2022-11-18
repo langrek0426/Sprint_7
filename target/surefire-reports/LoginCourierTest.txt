@@ -1,0 +1,14 @@
+-------------------------------------------------------------------------------
+Test set: LoginCourierTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 60.739 s <<< FAILURE! - in LoginCourierTest
+checkEmptyPasswordTest(LoginCourierTest)  Time elapsed: 60.209 s  <<< ERROR!
+java.lang.IllegalStateException: 
+Expected response body to be verified as JSON, HTML or XML but no content-type was defined in the response.
+Try registering a default parser using:
+   RestAssured.defaultParser(<parser type>);
+Content was:
+Service unavailable
+
+	at LoginCourierTest.checkEmptyPasswordTest(LoginCourierTest.java:72)
+
